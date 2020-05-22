@@ -12,3 +12,5 @@ Currently supports:
 - Horizontal Rule
 - Links
 - Images
+
+Example output [here](https://jsfiddle.net/1po3vdwb/)
