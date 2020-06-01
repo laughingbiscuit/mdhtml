@@ -1,5 +1,10 @@
 #!/bin/sh
-RESULT=$(cat example.md \
+set -e 
+
+# Accept filename or pipe
+[ $# -ge 1 -a -f "$1" ] && file="$1" || input="-"
+
+RESULT=$(cat $file \
   `#-----------------------------` 				\
   `# Inline Command Processing:` 				\
   `#-----------------------------` 				\
@@ -20,8 +25,10 @@ RESULT=$(cat example.md \
   `# Wrap paragraphs` \
   | sed -e 's/<br\/><br\/>\(\w.*\)<br\/><br\/>/<br\/><br\/><p>\1<\/p><br\/><br\/>/g' \
   `# Code Blocks` \
-  | sed -e "s/\`\`\`<br\/>\(.*\)\`\`\`/<code>\1<\/code>/" \
-  | sed -e "s/\`\([^\`]*\)\`/<code>\1<\/code>/" \
+  | sed -e "s/\`\`\`<br\/>\(.*\)\`\`\`/<code><pre>\1<\/pre><\/code>/g" \
+  | sed -e "s/\`\([^\`]*\)\`/<code><pre>\1<\/pre><\/code>/g" \
+  `# Remove double newlines` \
+  | sed -e "s/<br\/><br\/>//g" \
 )
 
-echo "<html>"$RESULT"</html>"
+echo '<html><head><link rel="stylesheet" type="text/css" href="styles.css"/><body></head>'$RESULT'</body></html>'
