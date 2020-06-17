@@ -25,10 +25,12 @@ RESULT=$(cat $file \
   `# Wrap paragraphs` \
   | sed -e 's/<br\/><br\/>\(\w.*\)<br\/><br\/>/<br\/><br\/><p>\1<\/p><br\/><br\/>/g' \
   `# Code Blocks` \
-  | sed -e "s/\`\`\`<br\/>\(.*\)\`\`\`/<code><pre>\1<\/pre><\/code>/g" \
-  | sed -e "s/\`\([^\`]*\)\`/<code><pre>\1<\/pre><\/code>/g" \
+  | sed -e "s/\`\`\`<br\/>\(.*\)\`\`\`/<pre><code>\1<\/code><\/pre>/g" \
+  | sed -e "s/\`\([^\`]*\)\`/<pre><code>\1<\/code><\/pre>/g" \
   `# Remove double newlines` \
   | sed -e "s/<br\/><br\/>//g" \
 )
 
-echo '<html><head><link rel="stylesheet" type="text/css" href="styles.css"/><body></head>'$RESULT'</body></html>'
+printf '<html><head><link rel="stylesheet" type="text/css" href="styles.css"/><body></head>'
+printf "$RESULT"
+printf '</body></html>'
